@@ -18,7 +18,7 @@
 
 ### Step 1: Mở Debug Tool
 ```
-File: /pages/vi/DEBUG-STEP8.html
+File: /shinhanbank/pages/vi/DEBUG-STEP8.html
 ```
 
 ### Step 2: Click "Kiểm tra userData"
@@ -38,7 +38,7 @@ Click "Mở Step8" để xem kết quả
 
 ### Step 1: Mở Step8
 ```
-File: /pages/vi/step8.html
+File: /shinhanbank/pages/vi/step8.html
 ```
 
 ### Step 2: Mở Console (F12)
@@ -80,7 +80,7 @@ Tìm các dòng:
 
 ### Step 1: Điền form Step1
 ```
-1. Mở: /pages/vi/step1.html
+1. Mở: /shinhanbank/pages/vi/step1.html
 2. Điền form với thông tin:
    - Họ tên: Nguyễn Văn Test
    - Số tiền vay: 50.000.000 đ
@@ -100,7 +100,7 @@ Phải thấy chuỗi encrypted dài!
 
 ### Step 3: Mở Step8 trực tiếp
 ```
-File: /pages/vi/step8.html
+File: /shinhanbank/pages/vi/step8.html
 ```
 
 ### Step 4: Verify data
@@ -121,7 +121,7 @@ Kiểm tra:
 
 **Giải pháp:**
 ```bash
-1. Mở: /pages/vi/DEBUG-STEP8.html
+1. Mở: /shinhanbank/pages/vi/DEBUG-STEP8.html
 2. Click: "Fix & Reload"
 3. Click: "Mở Step8"
 4. ✓ Phải thấy "Nguyễn Văn Test"
@@ -269,4 +269,5 @@ localStorage.getItem('userData')
 ---
 
 **Happy Testing! 🎉**
+
 
