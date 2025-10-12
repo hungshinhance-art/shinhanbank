@@ -932,13 +932,13 @@
     <main class="container content-card">
         <ul class="nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="/pages/vi/step1.html">1. Nhập thông tin</a>
+                <a class="nav-link" href="/shinhanbank/pages/vi/step1.html">1. Nhập thông tin</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/pages/vi/step2.html">2. Xác thực eKYC</a>
+                <a class="nav-link active" href="/shinhanbank/pages/vi/step2.html">2. Xác thực eKYC</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/pages/vi/step4.html">3. Xem xét hồ sơ</a>
+                <a class="nav-link" href="/shinhanbank/pages/vi/step4.html">3. Xem xét hồ sơ</a>
             </li>
         </ul>
         
@@ -1148,7 +1148,7 @@
             elements: {},
             config: {
                 ERROR_MESSAGE_TIMEOUT: 5000,
-                NEXT_STEP_URL: '/pages/vi/step4.html'
+                NEXT_STEP_URL: '/shinhanbank/pages/vi/step4.html'
             },
             async init() {
                 this.cacheDOMElements();
@@ -1881,7 +1881,7 @@
                         SimpleNavigation.goToStep(3); // Step 3 trong config là step4.html
                     } else {
                         // Fallback: chuyển trực tiếp
-                        window.location.href = '/pages/vi/step4.html';
+                        window.location.href = '/shinhanbank/pages/vi/step4.html';
                     }
                 }, 3000);
             },
