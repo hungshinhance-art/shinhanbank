@@ -190,12 +190,12 @@
             <div class="dropdown">
                 <i class="bi bi-list" data-bs-toggle="dropdown" aria-expanded="false"></i>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="/pages/vi/gioi-thieu.html">GIỚI THIỆU</a></li>
-                    <li><a class="dropdown-item" href="/pages/vi/tham-chieu.html">LỢI ÍCH</a></li>
-                    <li><a class="dropdown-item" href="/pages/vi/lai-suat-vay.html">GIẤY TỜ CẦN THIẾT</a></li>
-                    <li><a class="dropdown-item" href="/pages/vi/loan_registration.html">ĐĂNG KÝ TRỰC TUYẾN</a></li>
-                    <li><a class="dropdown-item" href="/pages/vi/lai-suat-tien-gui.html">XEM KẾT QUẢ</a></li>
-                    <li><a class="dropdown-item" href="/pages/vi/dieu-khoan-su-dung.html">ĐIỀU KHOẢN SỬ DỤNG</a></li>
+                    <li><a class="dropdown-item" href="/shinhanbank/pages/vi/gioi-thieu.html">GIỚI THIỆU</a></li>
+                    <li><a class="dropdown-item" href="/shinhanbank/pages/vi/tham-chieu.html">LỢI ÍCH</a></li>
+                    <li><a class="dropdown-item" href="/shinhanbank/pages/vi/lai-suat-vay.html">GIẤY TỜ CẦN THIẾT</a></li>
+                    <li><a class="dropdown-item" href="/shinhanbank/pages/vi/loan_registration.html">ĐĂNG KÝ TRỰC TUYẾN</a></li>
+                    <li><a class="dropdown-item" href="/shinhanbank/pages/vi/lai-suat-tien-gui.html">XEM KẾT QUẢ</a></li>
+                    <li><a class="dropdown-item" href="/shinhanbank/pages/vi/dieu-khoan-su-dung.html">ĐIỀU KHOẢN SỬ DỤNG</a></li>
                     <li><a class="dropdown-item" href="https://chatbot.zalo.me/ref/3932037504673339016?id=kichhoattuvan">LIÊN HỆ</a></li>
                 </ul>
             </div>
@@ -206,13 +206,13 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="/pages/vi/step1.html">1. Nhập thông tin</a>
+                <a class="nav-link" href="/shinhanbank/pages/vi/step1.html">1. Nhập thông tin</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/pages/vi/step4.html">2. Xác thực và xử lý</a>
+                <a class="nav-link" href="/shinhanbank/pages/vi/step4.html">2. Xác thực và xử lý</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/pages/vi/step6.html">3. Hoàn thành</a>
+                <a class="nav-link active" href="/shinhanbank/pages/vi/step6.html">3. Hoàn thành</a>
             </li>
         </ul>
 
@@ -225,17 +225,17 @@
             </div>
             <hr class="divider-blue">
             <div class="button-group">
-                <a href="/pages/vi/step5.html" class="btn btn-secondary">QUAY LẠI</a>
+                <a href="/shinhanbank/pages/vi/step5.html" class="btn btn-secondary">QUAY LẠI</a>
                 <button id="downloadContractBtn" class="btn btn-download" disabled>TẢI XUỐNG</button>
-                <a href="/pages/vi/step7.html" class="btn btn-primary">TIẾP TỤC</a>
+                <a href="/shinhanbank/pages/vi/step7.html" class="btn btn-primary">TIẾP TỤC</a>
             </div>
         </div>
     </div>
 
     <div class="footer">
         <div class="footer-links">
-            <a href="/pages/vi/chinh-sach-bao-mat.html">Chính sách bảo mật</a> |
-            <a href="/pages/vi/dieu-khoan-su-dung.html">Điều khoản sử dụng</a> |
+            <a href="/shinhanbank/pages/vi/chinh-sach-bao-mat.html">Chính sách bảo mật</a> |
+            <a href="/shinhanbank/pages/vi/dieu-khoan-su-dung.html">Điều khoản sử dụng</a> |
             <a href="https://shinhan.com.vn/vi/page/sitemap-2.html">Sitemap</a> |
             <a href="https://chatbot.zalo.me/ref/3932037504673339016?id=kichhoattuvan">Liên hệ</a>
         </div>
@@ -313,17 +313,17 @@
 
                     if (!userData.isRegistered || !userData.fullName) {
                         $('#formError').text('Không tìm thấy hồ sơ đã đăng ký. Vui lòng quay lại.').show();
-                        $('#downloadContractBtn, a[href="/pages/vi/step7.html"]').addClass('disabled');
+                        $('#downloadContractBtn, a[href="/shinhanbank/pages/vi/step7.html"]').addClass('disabled');
                     }
                 } else {
                     console.error('No userData found in localStorage');
                     $('#formError').text('Không tìm thấy dữ liệu hồ sơ. Vui lòng quay lại.').show();
-                    $('#downloadContractBtn, a[href="/pages/vi/step7.html"]').addClass('disabled');
+                    $('#downloadContractBtn, a[href="/shinhanbank/pages/vi/step7.html"]').addClass('disabled');
                 }
             } catch (error) {
                 console.error('Error parsing userData:', error);
                 $('#formError').text('Lỗi tải dữ liệu. Vui lòng quay lại.').show();
-                $('#downloadContractBtn, a[href="/pages/vi/step7.html"]').addClass('disabled');
+                $('#downloadContractBtn, a[href="/shinhanbank/pages/vi/step7.html"]').addClass('disabled');
             }
         }
 
@@ -441,7 +441,7 @@
             downloadAsPDF(canvas, `HopDongVay_${userData.loanCode || 'unknown'}.pdf`);
         });
 
-        $('a[href="/pages/vi/step7.html"]').on('click', function(e) {
+        $('a[href="/shinhanbank/pages/vi/step7.html"]').on('click', function(e) {
             e.preventDefault();
             userData.currentStep = 7;
             saveToLocalStorage();
