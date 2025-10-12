@@ -223,7 +223,7 @@
                     </div>
                     <div class="form-check p-3">
                         <input class="form-check-input" type="checkbox" id="contract-consent">
-                        <label class="form-check-label" for="contract-consent">Tôi xác nhận các thông tin trên là chính xác và đồng ý với <a href="/pages/vi/dieu-khoan-su-dung.html" class="fw-bold text-decoration-none" style="color:var(--primary-color);">điều khoản và điều kiện</a>.</label>
+                        <label class="form-check-label" for="contract-consent">Tôi xác nhận các thông tin trên là chính xác và đồng ý với <a href="/shinhanbank/pages/vi/dieu-khoan-su-dung.html" class="fw-bold text-decoration-none" style="color:var(--primary-color);">điều khoản và điều kiện</a>.</label>
                     </div>
                 </div>
 
@@ -298,7 +298,7 @@
                 ui.mainContent.style.display = 'block';
             } catch (error) {
                 console.error("Lỗi khởi động ứng dụng:", error);
-                displayGlobalError("Không thể tải dữ liệu khoản vay. Vui lòng quay lại <a href='/pages/vi/step1.html'>Bước 1</a> để nhập thông tin.");
+                displayGlobalError("Không thể tải dữ liệu khoản vay. Vui lòng quay lại <a href='/shinhanbank/pages/vi/step1.html'>Bước 1</a> để nhập thông tin.");
             }
         }
 
@@ -434,7 +434,7 @@
             const invalidFields = criticalFields.filter(field => isNaN(localData[field]) || localData[field] <= 0);
             if (invalidFields.length > 0) {
                 console.warn('Dữ liệu khoản vay không đầy đủ:', invalidFields);
-                displayGlobalError("Dữ liệu khoản vay không đầy đủ. Vui lòng quay lại <a href='/pages/vi/step1.html'>Bước 1</a> để nhập lại thông tin.");
+                displayGlobalError("Dữ liệu khoản vay không đầy đủ. Vui lòng quay lại <a href='/shinhanbank/pages/vi/step1.html'>Bước 1</a> để nhập lại thông tin.");
             }
             return localData;
         }
@@ -541,7 +541,7 @@
             
             try {
                 await new Promise(resolve => setTimeout(resolve, 3000));
-                window.location.href = '/pages/vi/step6.html';
+                window.location.href = '/shinhanbank/pages/vi/step6.html';
             } catch (error) {
                 console.error("Lỗi xác nhận khoản vay:", error);
                 ui.processingOverlay.classList.remove('show');
