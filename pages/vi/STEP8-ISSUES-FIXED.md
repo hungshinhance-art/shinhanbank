@@ -139,8 +139,8 @@ const formattedAmount = loanAmount.toLocaleString('vi-VN') + ' đ';
 <script src="script.js"></script>
 
 <!-- AFTER -->
-<link rel="stylesheet" href="/pages/vi/style.css">
-<script src="/pages/vi/script.js"></script>
+<link rel="stylesheet" href="/shinhanbank/pages/vi/style.css">
+<script src="/shinhanbank/pages/vi/script.js"></script>
 ```
 
 **Status:** ✅ FIXED
@@ -277,7 +277,7 @@ setInterval(() => {
 ### Quick Fix (1 click)
 
 ```
-1. Mở: /pages/vi/AUTO-FIX-STEP8.html
+1. Mở: /shinhanbank/pages/vi/AUTO-FIX-STEP8.html
 2. Click: "✨ Tự động sửa TẤT CẢ"
 3. Click: "▶️ Mở Step8 để kiểm tra"
 4. ✅ Done!
@@ -286,7 +286,7 @@ setInterval(() => {
 ### Detailed Scan
 
 ```
-1. Mở: /pages/vi/AUTO-FIX-STEP8.html
+1. Mở: /shinhanbank/pages/vi/AUTO-FIX-STEP8.html
 2. Click: "🔎 Quét tìm lỗi"
 3. Xem danh sách issues
 4. Click: "✨ Tự động sửa TẤT CẢ"
@@ -360,3 +360,4 @@ setInterval(() => {
 **Generated:** 2025-10-01  
 **Quality:** Production Grade  
 **Status:** READY TO DEPLOY 🚀
+
