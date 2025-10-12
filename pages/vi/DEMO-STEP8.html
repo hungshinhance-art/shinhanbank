@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Step8 - Timeline Visual</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, #0088FF 0%, #0068CC 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-section h2 {
+            color: #0088FF;
+            margin-bottom: 20px;
+        }
+        
+        /* Recreate Timeline Compact */
+        .timeline-compact {
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+        
+        .timeline-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+        }
+        
+        .countdown-timer {
+            background: linear-gradient(135deg, #0088FF 0%, #0068CC 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 136, 255, 0.3);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .countdown-number {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #E9ECEF;
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-fill-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0088FF 0%, #0068CC 100%);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            position: relative;
+            animation: fillProgress 3s ease-out;
+        }
+        
+        .progress-fill-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: var(--target-width); }
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #0088FF 0%, #0068CC 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 136, 255, 0.3);
+        }
+        
+        .info-box {
+            background: #E6F2FF;
+            border: 2px solid #0088FF;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .info-box h3 {
+            color: #0088FF;
+            margin-top: 0;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #E9ECEF;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list i {
+            color: #28A745;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1><i class="fas fa-rocket"></i> Step8 - Timeline Demo</h1>
+        <p>Xem trực tiếp countdown timer & progress bar hoạt động</p>
+    </div>
+
+    <!-- Live Timeline Demo -->
+    <div class="demo-section">
+        <h2><i class="fas fa-play-circle"></i> Live Timeline (Đang chạy)</h2>
+        
+        <div class="timeline-compact">
+            <div class="timeline-info">
+                <span class="timeline-title">Thời gian còn lại để hoàn tất</span>
+                <div class="countdown-timer" id="demoCountdown">
+                    <span class="countdown-number" id="demoTimer">23:59:59</span>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill-bar" id="demoProgress" style="width: 25%; --target-width: 25%;"></div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h3>📊 Thông tin Timeline</h3>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Countdown bắt đầu: <strong>24:00:00</strong></li>
+                <li><i class="fas fa-check-circle"></i> Progress bắt đầu: <strong>25%</strong> (1/4 thanh)</li>
+                <li><i class="fas fa-check-circle"></i> Màu sắc: <strong style="color: #0088FF;">Xanh Shinhan (#0088FF)</strong></li>
+                <li><i class="fas fa-check-circle"></i> Update: <strong>Mỗi 1 giây</strong></li>
+                <li><i class="fas fa-check-circle"></i> Khi hết: <strong>00:00:00 + 100%</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Demo Controls -->
+    <div class="demo-section">
+        <h2><i class="fas fa-sliders-h"></i> Test Controls</h2>
+        
+        <div class="demo-controls">
+            <button class="btn" onclick="setTime(24)">
+                <i class="fas fa-clock"></i> 24 giờ (25%)
+            </button>
+            <button class="btn" onclick="setTime(18)">
+                <i class="fas fa-clock"></i> 18 giờ (43%)
+            </button>
+            <button class="btn" onclick="setTime(12)">
+                <i class="fas fa-clock"></i> 12 giờ (62%)
+            </button>
+            <button class="btn" onclick="setTime(6)">
+                <i class="fas fa-clock"></i> 6 giờ (81%)
+            </button>
+            <button class="btn" onclick="setTime(1)">
+                <i class="fas fa-clock"></i> 1 giờ (96%)
+            </button>
+            <button class="btn" onclick="setTime(0)">
+                <i class="fas fa-clock"></i> Hết hạn (100%)
+            </button>
+        </div>
+        
+        <div class="info-box">
+            <p><strong>Hướng dẫn:</strong> Click vào các nút trên để xem countdown & progress bar thay đổi theo thời gian</p>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="demo-section">
+        <h2><i class="fas fa-star"></i> Key Features</h2>
+        
+        <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> <strong>Real-time Countdown:</strong> Đếm ngược chính xác từng giây (HH:MM:SS)</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Progress Animation:</strong> Từ 25% → 100% trong 24 giờ</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Shimmer Effect:</strong> Animation smooth trên progress bar</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Color Consistency:</strong> 100% xanh Shinhan (#0088FF)</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Smart Alerts:</strong> Warning states khi gần hết hạn</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Persistent:</strong> Lưu trong localStorage, không reset khi reload</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Mobile Optimized:</strong> Responsive design cho mọi thiết bị</li>
+        </ul>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="demo-section">
+        <h2><i class="fas fa-link"></i> Quick Links</h2>
+        
+        <div class="demo-controls">
+            <button class="btn" onclick="window.open('/pages/vi/step8.html', '_blank')">
+                <i class="fas fa-external-link-alt"></i>
+                Mở Step8 (Live)
+            </button>
+            <button class="btn" onclick="window.open('/pages/vi/test-step8-data.html', '_blank')">
+                <i class="fas fa-database"></i>
+                Test Data Loading
+            </button>
+            <button class="btn" onclick="window.open('/pages/vi/STEP8-SUMMARY.md', '_blank')">
+                <i class="fas fa-file-alt"></i>
+                Xem Summary
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let demoEndTime = Date.now() + (24 * 60 * 60 * 1000);
+        
+        function updateDemo() {
+            const now = Date.now();
+            const remaining = demoEndTime - now;
+            
+            if (remaining <= 0) {
+                document.getElementById('demoTimer').textContent = '00:00:00';
+                document.getElementById('demoProgress').style.width = '100%';
+                document.getElementById('demoProgress').style.background = 'linear-gradient(90deg, #DC3545 0%, #C82333 100%)';
+                return;
+            }
+            
+            // Calculate countdown
+            const totalSeconds = Math.floor(remaining / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            const formattedTime = 
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+            
+            document.getElementById('demoTimer').textContent = formattedTime;
+            
+            // Calculate progress (25% to 100%)
+            const totalDuration = 24 * 60 * 60 * 1000;
+            const elapsed = totalDuration - remaining;
+            const timeProgress = (elapsed / totalDuration) * 100;
+            const displayProgress = 25 + (timeProgress * 0.75);
+            
+            const progressBar = document.getElementById('demoProgress');
+            progressBar.style.width = displayProgress + '%';
+            
+            // Change color
+            if (timeProgress >= 90) {
+                progressBar.style.background = 'linear-gradient(90deg, #FFC107 0%, #E0A800 100%)';
+            } else {
+                progressBar.style.background = 'linear-gradient(90deg, #0088FF 0%, #0068CC 100%)';
+            }
+        }
+        
+        function setTime(hours) {
+            if (hours === 0) {
+                demoEndTime = Date.now() - 1000; // Already expired
+            } else {
+                demoEndTime = Date.now() + (hours * 60 * 60 * 1000);
+            }
+            updateDemo();
+        }
+        
+        // Update every second
+        setInterval(updateDemo, 1000);
+        updateDemo();
+    </script>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🎬 Step8 Timeline - Live Demo</h1>
+        <p>Xem trực tiếp countdown timer và progress bar hoạt động</p>
+    </div>
+
+    <div class="demo-section">
+        <h2><i class="fas fa-play-circle"></i> Live Timeline (Đang chạy)</h2>
+        
+        <div class="timeline-compact">
+            <div class="timeline-info">
+                <span class="timeline-title">Thời gian còn lại để hoàn tất</span>
+                <div class="countdown-timer" id="demoCountdown">
+                    <span class="countdown-number" id="demoTimer">23:59:59</span>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill-bar" id="demoProgress" style="width: 25%;"></div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h3>📊 Thông tin Timeline</h3>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Countdown bắt đầu: <strong>24:00:00</strong></li>
+                <li><i class="fas fa-check-circle"></i> Progress bắt đầu: <strong>25%</strong> (1/4 thanh)</li>
+                <li><i class="fas fa-check-circle"></i> Màu sắc: <strong style="color: #0088FF;">Xanh Shinhan (#0088FF)</strong></li>
+                <li><i class="fas fa-check-circle"></i> Update: <strong>Mỗi 1 giây</strong></li>
+                <li><i class="fas fa-check-circle"></i> Khi hết: <strong>00:00:00 + 100%</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2><i class="fas fa-sliders-h"></i> Test Controls</h2>
+        
+        <div class="demo-controls">
+            <button class="btn" onclick="setTime(24)">
+                <i class="fas fa-clock"></i> 24 giờ (25%)
+            </button>
+            <button class="btn" onclick="setTime(18)">
+                <i class="fas fa-clock"></i> 18 giờ (43%)
+            </button>
+            <button class="btn" onclick="setTime(12)">
+                <i class="fas fa-clock"></i> 12 giờ (62%)
+            </button>
+            <button class="btn" onclick="setTime(6)">
+                <i class="fas fa-clock"></i> 6 giờ (81%)
+            </button>
+            <button class="btn" onclick="setTime(1)">
+                <i class="fas fa-clock"></i> 1 giờ (96%)
+            </button>
+            <button class="btn" onclick="setTime(0)">
+                <i class="fas fa-clock"></i> Hết hạn (100%)
+            </button>
+        </div>
+        
+        <div class="info-box">
+            <p><strong>Hướng dẫn:</strong> Click vào các nút trên để xem countdown & progress bar thay đổi theo thời gian</p>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2><i class="fas fa-star"></i> Key Features</h2>
+        
+        <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> <strong>Real-time Countdown:</strong> Đếm ngược chính xác từng giây (HH:MM:SS)</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Progress Animation:</strong> Từ 25% → 100% trong 24 giờ</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Shimmer Effect:</strong> Animation smooth trên progress bar</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Color Consistency:</strong> 100% xanh Shinhan (#0088FF)</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Smart Alerts:</strong> Warning states khi gần hết hạn</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Mobile Optimized:</strong> Responsive cho mọi thiết bị</li>
+        </ul>
+    </div>
+
+    <div class="demo-section">
+        <h2><i class="fas fa-link"></i> Quick Links</h2>
+        
+        <div class="demo-controls">
+            <button class="btn" onclick="window.open('/pages/vi/step8.html', '_blank')">
+                <i class="fas fa-external-link-alt"></i>
+                Mở Step8 (Live)
+            </button>
+            <button class="btn" onclick="window.open('/pages/vi/test-step8-data.html', '_blank')">
+                <i class="fas fa-database"></i>
+                Test Data Loading
+            </button>
+        </div>
+    </div>
+</body>
+</html>
+

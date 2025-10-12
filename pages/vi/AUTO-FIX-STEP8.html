@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Fix Step8 Issues</title>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin: 0;
+            font-size: 32px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .panel h2 {
+            color: #333;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .issue {
+            background: #f8f9fa;
+            border-left: 4px solid #DC3545;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .issue.fixed {
+            border-left-color: #28A745;
+            background: #d4edda;
+        }
+        
+        .issue h3 {
+            margin: 0 0 10px 0;
+            color: #DC3545;
+            font-size: 16px;
+        }
+        
+        .issue.fixed h3 {
+            color: #28A745;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn.success {
+            background: linear-gradient(135deg, #28A745 0%, #20C997 100%);
+        }
+        
+        .btn.danger {
+            background: linear-gradient(135deg, #DC3545 0%, #C82333 100%);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .status-badge.ok {
+            background: #28A745;
+            color: white;
+        }
+        
+        .status-badge.warn {
+            background: #FFC107;
+            color: black;
+        }
+        
+        .status-badge.error {
+            background: #DC3545;
+            color: white;
+        }
+        
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+        }
+        
+        .log-entry.success { color: #28A745; }
+        .log-entry.error { color: #DC3545; }
+        .log-entry.warning { color: #FFC107; }
+        .log-entry.info { color: #17A2B8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Auto-Fix Step8.html</h1>
+            <p>Tự động tìm và sửa tất cả lỗi tiềm ẩn</p>
+        </div>
+
+        <div class="panel">
+            <h2>🔍 Scan for Issues</h2>
+            <button class="btn" onclick="scanIssues()">
+                🔎 Quét tìm lỗi
+            </button>
+            <div id="issuesList"></div>
+        </div>
+
+        <div class="panel">
+            <h2>🛠️ Auto-Fix Actions</h2>
+            <button class="btn success" onclick="autoFixAll()">
+                ✨ Tự động sửa TẤT CẢ
+            </button>
+            <button class="btn" onclick="createTestData()">
+                📝 Tạo dữ liệu test
+            </button>
+            <button class="btn danger" onclick="resetAll()">
+                🔄 Reset về mặc định
+            </button>
+        </div>
+
+        <div class="panel">
+            <h2>📊 Status</h2>
+            <div id="statusDisplay"></div>
+        </div>
+
+        <div class="panel">
+            <h2>📝 Action Log</h2>
+            <div class="log" id="actionLog"></div>
+        </div>
+
+        <div class="panel">
+            <h2>🚀 Test</h2>
+            <button class="btn success" onclick="window.open('/pages/vi/step8.html', '_blank')">
+                ▶️ Mở Step8 để kiểm tra
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const log = [];
+        
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            log.push({ timestamp, message, type });
+            updateLogDisplay();
+        }
+        
+        function updateLogDisplay() {
+            const logDiv = document.getElementById('actionLog');
+            logDiv.innerHTML = log.map(entry => 
+                `<div class="log-entry ${entry.type}">[${entry.timestamp}] ${entry.message}</div>`
+            ).reverse().join('');
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function scanIssues() {
+            addLog('🔍 Bắt đầu quét tìm lỗi...', 'info');
+            const issues = [];
+            
+            // Check 1: userData exists?
+            const userData = localStorage.getItem('userData');
+            if (!userData) {
+                issues.push({
+                    type: 'error',
+                    title: 'Thiếu userData',
+                    desc: 'Không tìm thấy userData trong localStorage',
+                    fix: 'Tạo dữ liệu mẫu'
+                });
+                addLog('❌ userData không tồn tại', 'error');
+            } else {
+                addLog('✅ userData tồn tại', 'success');
+                
+                // Check 2: Can decrypt?
+                try {
+                    if (typeof CryptoJS !== 'undefined') {
+                        const decrypted = CryptoJS.AES.decrypt(userData, 'shinhan-secret-key').toString(CryptoJS.enc.Utf8);
+                        const data = JSON.parse(decrypted);
+                        addLog('✅ Decrypt thành công', 'success');
+                        
+                        // Check 3: Required fields?
+                        const requiredFields = ['fullName', 'loanAmount', 'monthlyPayment'];
+                        requiredFields.forEach(field => {
+                            if (!data[field]) {
+                                issues.push({
+                                    type: 'warning',
+                                    title: `Thiếu field: ${field}`,
+                                    desc: `userData.${field} không có giá trị`,
+                                    fix: 'Điền lại form Step1'
+                                });
+                                addLog(`⚠️ Thiếu ${field}`, 'warning');
+                            } else {
+                                addLog(`✅ ${field} = ${data[field]}`, 'success');
+                            }
+                        });
+                        
+                        // Check 4: Data format
+                        if (data.loanAmount && isNaN(parseInt(data.loanAmount))) {
+                            issues.push({
+                                type: 'error',
+                                title: 'Format lỗi: loanAmount',
+                                desc: 'loanAmount không phải là số',
+                                fix: 'Sửa format dữ liệu'
+                            });
+                            addLog('❌ loanAmount format lỗi', 'error');
+                        }
+                        
+                        if (data.monthlyPayment && isNaN(parseFloat(data.monthlyPayment))) {
+                            issues.push({
+                                type: 'error',
+                                title: 'Format lỗi: monthlyPayment',
+                                desc: 'monthlyPayment không phải là số',
+                                fix: 'Sửa format dữ liệu'
+                            });
+                            addLog('❌ monthlyPayment format lỗi', 'error');
+                        }
+                        
+                    } else {
+                        issues.push({
+                            type: 'error',
+                            title: 'CryptoJS không load',
+                            desc: 'Không thể decrypt userData',
+                            fix: 'Reload trang'
+                        });
+                        addLog('❌ CryptoJS chưa load', 'error');
+                    }
+                } catch (error) {
+                    issues.push({
+                        type: 'error',
+                        title: 'Lỗi decrypt',
+                        desc: error.message,
+                        fix: 'Xóa và tạo lại userData'
+                    });
+                    addLog('❌ Decrypt error: ' + error.message, 'error');
+                }
+            }
+            
+            // Check 5: disbursementEndTime?
+            const endTime = localStorage.getItem('disbursementEndTime');
+            if (!endTime) {
+                issues.push({
+                    type: 'warning',
+                    title: 'Thiếu disbursementEndTime',
+                    desc: 'Countdown timer sẽ tạo mới',
+                    fix: 'Auto-create khi load'
+                });
+                addLog('⚠️ disbursementEndTime chưa có', 'warning');
+            } else {
+                addLog('✅ disbursementEndTime tồn tại', 'success');
+            }
+            
+            // Display issues
+            const issuesDiv = document.getElementById('issuesList');
+            if (issues.length === 0) {
+                issuesDiv.innerHTML = `
+                    <div class="issue fixed">
+                        <h3>✅ Không tìm thấy lỗi!</h3>
+                        <p>Step8.html sẵn sàng hoạt động</p>
+                    </div>
+                `;
+                addLog('✅ Quét hoàn tất - Không có lỗi!', 'success');
+            } else {
+                issuesDiv.innerHTML = issues.map(issue => `
+                    <div class="issue">
+                        <h3>${issue.type === 'error' ? '❌' : '⚠️'} ${issue.title}</h3>
+                        <p><strong>Mô tả:</strong> ${issue.desc}</p>
+                        <p><strong>Giải pháp:</strong> ${issue.fix}</p>
+                    </div>
+                `).join('');
+                addLog(`⚠️ Tìm thấy ${issues.length} vấn đề`, 'warning');
+            }
+            
+            // Update status
+            updateStatus();
+        }
+        
+        function autoFixAll() {
+            addLog('🔧 Bắt đầu auto-fix...', 'info');
+            
+            // Fix 1: Create userData if missing
+            let userData = localStorage.getItem('userData');
+            if (!userData) {
+                addLog('📝 Tạo userData mẫu...', 'info');
+                createTestData();
+                return; // createTestData will call autoFixAll again
+            }
+            
+            // Fix 2: Ensure all required fields exist
+            try {
+                const decrypted = CryptoJS.AES.decrypt(userData, 'shinhan-secret-key').toString(CryptoJS.enc.Utf8);
+                let data = JSON.parse(decrypted);
+                
+                let modified = false;
+                
+                // Fill missing fields with defaults
+                if (!data.fullName) {
+                    data.fullName = 'Nguyễn Văn A';
+                    modified = true;
+                    addLog('🔧 Thêm fullName mặc định', 'warning');
+                }
+                
+                if (!data.loanAmount) {
+                    data.loanAmount = '30000000';
+                    modified = true;
+                    addLog('🔧 Thêm loanAmount mặc định', 'warning');
+                }
+                
+                if (!data.monthlyPayment) {
+                    // Calculate from loanAmount
+                    const loanAmount = parseInt(data.loanAmount);
+                    const term = parseInt(data.loanTerm) || 12;
+                    const rate = (data.interestRate || 12) / 100 / 12;
+                    data.monthlyPayment = (loanAmount * rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+                    modified = true;
+                    addLog('🔧 Tính monthlyPayment từ loanAmount', 'warning');
+                }
+                
+                if (modified) {
+                    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), 'shinhan-secret-key').toString();
+                    localStorage.setItem('userData', encrypted);
+                    addLog('✅ Đã cập nhật userData', 'success');
+                }
+                
+            } catch (error) {
+                addLog('❌ Lỗi fix userData: ' + error.message, 'error');
+                return;
+            }
+            
+            // Fix 3: Create disbursementEndTime if missing
+            if (!localStorage.getItem('disbursementEndTime')) {
+                const endTime = Date.now() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('disbursementEndTime', endTime.toString());
+                addLog('✅ Tạo disbursementEndTime (24h countdown)', 'success');
+            }
+            
+            addLog('✅ AUTO-FIX HOÀN TẤT!', 'success');
+            updateStatus();
+            
+            setTimeout(() => {
+                scanIssues();
+            }, 500);
+        }
+        
+        function createTestData() {
+            addLog('📝 Tạo dữ liệu test hoàn chỉnh...', 'info');
+            
+            const userData = {
+                fullName: 'Nguyễn Văn Test',
+                dob: '01/01/1990',
+                gender: 'Nam',
+                contactAddress: '123 Đường Test, Quận 1, TP.HCM',
+                cccd: '123456789012',
+                issuePlace: 'Cục Cảnh sát ĐKQL Cư trú và DLQG về dân cư',
+                phone: '0901234567',
+                email: 'test@example.com',
+                loanType: 'Vay tín chấp',
+                loanTerm: '12',
+                loanAmount: '50000000',
+                interestRate: 12.0,
+                monthlyIncome: 15000000,
+                occupation: 'Kỹ sư',
+                purpose: 'business',
+                accountName: 'Nguyễn Văn Test',
+                accountNumber: '1234567890',
+                bankName: 'shinhan',
+                loanCode: 'SHB' + Math.floor(100000 + Math.random() * 900000),
+                monthlyPayment: 4441.67,
+                totalInterest: 3300000,
+                totalRepay: 53300000,
+                currentStep: 8,
+                isRegistered: true,
+                emailSent: true,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(userData), 'shinhan-secret-key').toString();
+                localStorage.setItem('userData', encryptedData);
+                
+                const endTime = Date.now() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('disbursementEndTime', endTime.toString());
+                
+                addLog('✅ Tạo userData thành công', 'success');
+                addLog('✅ Tạo disbursementEndTime thành công', 'success');
+                addLog('📊 Data: ' + userData.fullName + ', ' + userData.loanAmount, 'info');
+                
+                updateStatus();
+                scanIssues();
+            } catch (error) {
+                addLog('❌ Lỗi tạo data: ' + error.message, 'error');
+            }
+        }
+        
+        function resetAll() {
+            if (confirm('⚠️ Xóa TẤT CẢ dữ liệu?\n\nStep8 sẽ hiển thị dữ liệu mặc định.')) {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('disbursementEndTime');
+                addLog('🗑️ Đã xóa tất cả localStorage', 'warning');
+                updateStatus();
+                scanIssues();
+            }
+        }
+        
+        function updateStatus() {
+            const statusDiv = document.getElementById('statusDisplay');
+            const hasUserData = !!localStorage.getItem('userData');
+            const hasEndTime = !!localStorage.getItem('disbursementEndTime');
+            
+            let html = '<div style="display: flex; gap: 10px; flex-wrap: wrap;">';
+            
+            html += hasUserData ? 
+                '<span class="status-badge ok">✅ userData OK</span>' : 
+                '<span class="status-badge error">❌ userData THIẾU</span>';
+            
+            html += hasEndTime ? 
+                '<span class="status-badge ok">✅ Timeline OK</span>' : 
+                '<span class="status-badge warn">⚠️ Timeline sẽ tạo mới</span>';
+            
+            html += '</div>';
+            
+            // Show current data preview
+            if (hasUserData) {
+                try {
+                    const encrypted = localStorage.getItem('userData');
+                    const decrypted = CryptoJS.AES.decrypt(encrypted, 'shinhan-secret-key').toString(CryptoJS.enc.Utf8);
+                    const data = JSON.parse(decrypted);
+                    
+                    html += `
+                        <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            <h4 style="margin: 0 0 10px 0;">📊 Dữ liệu hiện tại:</h4>
+                            <p><strong>Họ tên:</strong> ${data.fullName || 'N/A'}</p>
+                            <p><strong>Số tiền vay:</strong> ${data.loanAmount ? parseInt(data.loanAmount).toLocaleString('vi-VN') + ' đ' : 'N/A'}</p>
+                            <p><strong>Trả hàng tháng:</strong> ${data.monthlyPayment ? Math.floor(data.monthlyPayment).toLocaleString('vi-VN') + ' đ' : 'N/A'}</p>
+                        </div>
+                    `;
+                } catch (error) {
+                    html += `<div style="margin-top: 15px; padding: 15px; background: #f8d7da; border-radius: 8px;">
+                        <p style="color: #DC3545;"><strong>❌ Lỗi đọc dữ liệu:</strong> ${error.message}</p>
+                    </div>`;
+                }
+            }
+            
+            statusDiv.innerHTML = html;
+        }
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            addLog('🚀 Auto-Fix Tool initialized', 'success');
+            updateStatus();
+        });
+    </script>
+</body>
+</html>
+

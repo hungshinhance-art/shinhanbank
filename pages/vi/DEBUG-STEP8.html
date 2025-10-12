@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug Step8 Data Loading</title>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <style>
+      body {
+        font-family: "Courier New", monospace;
+        padding: 20px;
+        background: #1e1e1e;
+        color: #d4d4d4;
+      }
+
+      .debug-panel {
+        background: #2d2d2d;
+        border: 2px solid #0088ff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .debug-panel h2 {
+        color: #0088ff;
+        margin-top: 0;
+      }
+
+      .status {
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        font-weight: bold;
+      }
+
+      .success {
+        background: #28a745;
+        color: white;
+      }
+
+      .error {
+        background: #dc3545;
+        color: white;
+      }
+
+      .warning {
+        background: #ffc107;
+        color: black;
+      }
+
+      .data-field {
+        background: #1e1e1e;
+        padding: 10px;
+        border-left: 3px solid #0088ff;
+        margin: 5px 0;
+      }
+
+      .data-field label {
+        color: #808080;
+        font-size: 12px;
+      }
+
+      .data-field .value {
+        color: #4ec9b0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .btn {
+        background: #0088ff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+        font-weight: bold;
+      }
+
+      .btn:hover {
+        background: #0068cc;
+      }
+
+      .btn.danger {
+        background: #dc3545;
+      }
+
+      pre {
+        background: #1e1e1e;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        color: #ce9178;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="debug-panel">
+      <h2>🔍 STEP8 DATA LOADING DEBUG</h2>
+
+      <div id="status"></div>
+
+      <button class="btn" onclick="checkData()">🔄 Kiểm tra userData</button>
+      <button class="btn" onclick="fixData()">🔧 Fix & Reload</button>
+      <button class="btn danger" onclick="clearData()">
+        🗑️ Clear userData
+      </button>
+      <button
+        class="btn"
+        onclick="window.open('/pages/vi/step8.html', '_blank')"
+      >
+        ▶️ Mở Step8
+      </button>
+    </div>
+
+    <div class="debug-panel">
+      <h2>📊 localStorage Status</h2>
+      <div id="localStorageStatus"></div>
+    </div>
+
+    <div class="debug-panel">
+      <h2>📋 userData Fields</h2>
+      <div id="userDataFields"></div>
+    </div>
+
+    <div class="debug-panel">
+      <h2>💾 Raw Data</h2>
+      <pre id="rawData"></pre>
+    </div>
+
+    <script>
+      function checkData() {
+        const statusDiv = document.getElementById("status");
+        const lsStatus = document.getElementById("localStorageStatus");
+        const fieldsDiv = document.getElementById("userDataFields");
+        const rawDiv = document.getElementById("rawData");
+
+        // Check if userData exists
+        const encryptedData = localStorage.getItem("userData");
+
+        if (!encryptedData) {
+          statusDiv.innerHTML =
+            '<div class="status error">❌ KHÔNG TÌM THẤY userData trong localStorage</div>';
+          lsStatus.innerHTML =
+            '<p>localStorage.getItem("userData") = <strong>null</strong></p>';
+          fieldsDiv.innerHTML = "<p>Không có dữ liệu</p>";
+          rawDiv.textContent = "No data";
+          return;
+        }
+
+        statusDiv.innerHTML =
+          '<div class="status success">✅ userData TỒN TẠI trong localStorage</div>';
+
+        // Try to decrypt
+        let userData;
+        let decryptMethod = "";
+
+        try {
+          if (typeof CryptoJS === "undefined") {
+            decryptMethod = "Plain JSON (CryptoJS not loaded)";
+            userData = JSON.parse(encryptedData);
+          } else {
+            decryptMethod = "CryptoJS AES Decryption";
+            const decryptedData = CryptoJS.AES.decrypt(
+              encryptedData,
+              "shinhan-secret-key"
+            ).toString(CryptoJS.enc.Utf8);
+            userData = JSON.parse(decryptedData);
+          }
+
+          statusDiv.innerHTML +=
+            '<div class="status success">✅ DECRYPT THÀNH CÔNG - Method: ' +
+            decryptMethod +
+            "</div>";
+        } catch (error) {
+          statusDiv.innerHTML +=
+            '<div class="status error">❌ DECRYPT LỖI: ' +
+            error.message +
+            "</div>";
+          rawDiv.textContent = "Decrypt failed: " + error.message;
+          return;
+        }
+
+        // Show localStorage status
+        lsStatus.innerHTML = `
+                <p>✅ localStorage.getItem("userData") = <strong>EXISTS</strong></p>
+                <p>📏 Data length: <strong>${encryptedData.length}</strong> characters</p>
+                <p>🔐 Decryption: <strong>${decryptMethod}</strong></p>
+            `;
+
+        // Show fields
+        const fields = [
+          { key: "fullName", label: "👤 Họ và tên", target: "customerName" },
+          {
+            key: "loanAmount",
+            label: "💰 Số tiền vay",
+            target: "loanAmountValue",
+          },
+          {
+            key: "monthlyPayment",
+            label: "💵 Trả hàng tháng",
+            target: "monthlyPaymentAmount",
+          },
+          { key: "cccd", label: "🆔 CCCD", target: null },
+          { key: "phone", label: "📞 Điện thoại", target: null },
+          { key: "email", label: "📧 Email", target: null },
+          { key: "loanTerm", label: "📅 Kỳ hạn", target: null },
+          { key: "loanType", label: "📋 Loại vay", target: null },
+        ];
+
+        let fieldsHTML = "";
+        fields.forEach((field) => {
+          const value = userData[field.key];
+          const status = value ? "✅" : "❌";
+          const displayValue = value || "N/A";
+
+          fieldsHTML += `
+                    <div class="data-field">
+                        <label>${status} ${field.label}</label>
+                        <div class="value">${displayValue}</div>
+                        ${
+                          field.target
+                            ? `<small>→ Maps to: <code>#${field.target}</code></small>`
+                            : ""
+                        }
+                    </div>
+                `;
+        });
+
+        fieldsDiv.innerHTML = fieldsHTML;
+
+        // Show raw data
+        rawDiv.textContent = JSON.stringify(userData, null, 2);
+
+        // Verify element IDs exist in DOM
+        console.log("🔍 Checking if elements exist in step8.html:");
+        const elements = [
+          "customerName",
+          "loanAmountValue",
+          "monthlyPaymentAmount",
+          "requiredAmount",
+          "paymentDate",
+        ];
+        elements.forEach((id) => {
+          const exists = document.getElementById(id) !== null;
+          console.log(`  ${exists ? "✅" : "❌"} #${id}`);
+        });
+      }
+
+      function fixData() {
+        const userData = {
+          fullName: "Nguyễn Văn Test",
+          dob: "01/01/1990",
+          gender: "Nam",
+          contactAddress: "123 Đường Test, Quận 1, TP.HCM",
+          cccd: "123456789012",
+          issuePlace: "Cục Cảnh sát ĐKQL Cư trú và DLQG về dân cư",
+          phone: "0901234567",
+          email: "test@example.com",
+          loanType: "Vay tín chấp",
+          loanTerm: "12",
+          loanAmount: "50000000",
+          interestRate: 12.0,
+          monthlyIncome: 15000000,
+          occupation: "Kỹ sư",
+          purpose: "business",
+          accountName: "Nguyễn Văn Test",
+          accountNumber: "1234567890",
+          bankName: "shinhan",
+          loanCode: "SHB" + Math.floor(100000 + Math.random() * 900000),
+          monthlyPayment: 4441.67,
+          totalInterest: 3300000,
+          totalRepay: 53300000,
+          currentStep: 8,
+          isRegistered: true,
+          emailSent: true,
+          timestamp: new Date().toISOString(),
+        };
+
+        try {
+          const encryptedData = CryptoJS.AES.encrypt(
+            JSON.stringify(userData),
+            "shinhan-secret-key"
+          ).toString();
+          localStorage.setItem("userData", encryptedData);
+          alert(
+            '✅ Đã tạo userData mẫu!\n\nClick "Kiểm tra userData" để verify'
+          );
+          checkData();
+        } catch (error) {
+          alert("❌ Lỗi: " + error.message);
+        }
+      }
+
+      function clearData() {
+        if (confirm("Xóa userData?")) {
+          localStorage.removeItem("userData");
+          alert("✅ Đã xóa userData!");
+          checkData();
+        }
+      }
+
+      // Auto check on load
+      window.addEventListener("DOMContentLoaded", checkData);
+    </script>
+  </body>
+</html>

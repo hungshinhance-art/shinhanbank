@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Step1 Features - Shinhan Bank</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        background: #f5f7fa;
+        padding: 20px;
+      }
+
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .test-header {
+        background: linear-gradient(135deg, #00468e 0%, #0056b3 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 70, 142, 0.3);
+      }
+
+      .test-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .test-header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+      }
+
+      .test-section {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .test-section h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #00468e;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .test-section h2 i {
+        font-size: 28px;
+      }
+
+      .test-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border-left: 4px solid #00468e;
+      }
+
+      .test-item h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 10px;
+      }
+
+      .test-item p {
+        margin-bottom: 10px;
+        color: #6c757d;
+      }
+
+      .test-button {
+        background: linear-gradient(135deg, #00468e 0%, #0056b3 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .test-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 70, 142, 0.3);
+      }
+
+      .test-button.secondary {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      }
+
+      .test-result {
+        background: #e7f5ff;
+        border: 2px solid #00468e;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+        display: none;
+      }
+
+      .test-result.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .test-result.success {
+        background: #d4edda;
+        border-color: #28a745;
+      }
+
+      .test-result.error {
+        background: #f8d7da;
+        border-color: #dc3545;
+      }
+
+      .checklist {
+        list-style: none;
+        padding: 0;
+      }
+
+      .checklist li {
+        padding: 10px;
+        margin-bottom: 8px;
+        background: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .checklist li input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .feature-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #00468e;
+        color: white;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      .feature-badge.new {
+        background: #28a745;
+      }
+
+      .iframe-container {
+        width: 100%;
+        height: 600px;
+        border: 3px solid #00468e;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 20px;
+      }
+
+      .iframe-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <!-- Header -->
+      <div class="test-header">
+        <h1><i class="fas fa-flask"></i> Test Step1.html - New Features</h1>
+        <p>Kiểm tra tất cả tính năng mới được thêm vào Step 1</p>
+      </div>
+
+      <!-- Test Section 1: Form Progress -->
+      <div class="test-section">
+        <h2>
+          <i class="fas fa-chart-line"></i> 1. Form Progress Indicator
+          <span class="feature-badge new">NEW</span>
+        </h2>
+
+        <div class="test-item">
+          <h3>✅ Checklist kiểm tra:</h3>
+          <ul class="checklist">
+            <li>
+              <input type="checkbox" id="check1" />
+              <label for="check1"
+                >Progress bar hiển thị % hoàn thành (0-100%)</label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="check2" />
+              <label for="check2">Đếm số trường đã điền / tổng số trường</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check3" />
+              <label for="check3">Màu đổi theo tiến độ: Đỏ → Vàng → Xanh</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check4" />
+              <label for="check4">Shimmer animation hoạt động</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check5" />
+              <label for="check5">Update realtime khi nhập liệu</label>
+            </li>
+          </ul>
+
+          <button class="test-button" onclick="openStep1()">
+            <i class="fas fa-external-link-alt"></i>
+            Mở Step1 để test
+          </button>
+        </div>
+      </div>
+
+      <!-- Test Section 2: Sticky Button -->
+      <div class="test-section">
+        <h2>
+          <i class="fas fa-mobile-alt"></i> 2. Sticky Submit Button (Mobile)
+          <span class="feature-badge new">NEW</span>
+        </h2>
+
+        <div class="test-item">
+          <h3>✅ Checklist kiểm tra:</h3>
+          <ul class="checklist">
+            <li>
+              <input type="checkbox" id="check6" />
+              <label for="check6"
+                >Nút "Tiếp tục" luôn hiển thị khi scroll (mobile)</label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="check7" />
+              <label for="check7">Slide-up animation mượt mà</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check8" />
+              <label for="check8">Nút ẩn khi đến cuối trang</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check9" />
+              <label for="check9">Full-width button trên mobile</label>
+            </li>
+          </ul>
+
+          <button class="test-button" onclick="testMobileView()">
+            <i class="fas fa-mobile"></i>
+            Test Mobile View
+          </button>
+        </div>
+      </div>
+
+      <!-- Test Section 3: Auto-save -->
+      <div class="test-section">
+        <h2>
+          <i class="fas fa-save"></i> 3. Enhanced Auto-save Notification
+          <span class="feature-badge new">NEW</span>
+        </h2>
+
+        <div class="test-item">
+          <h3>✅ Checklist kiểm tra:</h3>
+          <ul class="checklist">
+            <li>
+              <input type="checkbox" id="check10" />
+              <label for="check10">Hiển thị "Đang lưu..." với spinner</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check11" />
+              <label for="check11"
+                >"Đã lưu thành công" với checkmark xanh</label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="check12" />
+              <label for="check12">Auto-hide sau 2 giây</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check13" />
+              <label for="check13">Position top-right với shadow</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Test Section 4: Validation Checkmarks -->
+      <div class="test-section">
+        <h2>
+          <i class="fas fa-check-circle"></i> 4. Visual Validation Checkmarks
+          <span class="feature-badge new">NEW</span>
+        </h2>
+
+        <div class="test-item">
+          <h3>✅ Checklist kiểm tra:</h3>
+          <ul class="checklist">
+            <li>
+              <input type="checkbox" id="check14" />
+              <label for="check14">Hiển thị ✓ checkmark khi field hợp lệ</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check15" />
+              <label for="check15">Border màu xanh cho valid fields</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check16" />
+              <label for="check16">Checkmark biến mất khi xóa nội dung</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Test Section 5: Clickable Validation Summary -->
+      <div class="test-section">
+        <h2>
+          <i class="fas fa-mouse-pointer"></i> 5. Clickable Validation Summary
+          <span class="feature-badge">ENHANCED</span>
+        </h2>
+
+        <div class="test-item">
+          <h3>✅ Checklist kiểm tra:</h3>
+          <ul class="checklist">
+            <li>
+              <input type="checkbox" id="check17" />
+              <label for="check17"
+                >Click vào lỗi → scroll đến field tương ứng</label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="check18" />
+              <label for="check18">Field được highlight với animation</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check19" />
+              <label for="check19">Auto focus vào field</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check20" />
+              <label for="check20">Hiển thị "Click để xem" khi hover</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Test Section 6: Enhanced Checkbox -->
+      <div class="test-section">
+        <h2>
+          <i class="fas fa-check-square"></i> 6. Enhanced Privacy Checkbox
+          <span class="feature-badge">ENHANCED</span>
+        </h2>
+
+        <div class="test-item">
+          <h3>✅ Checklist kiểm tra:</h3>
+          <ul class="checklist">
+            <li>
+              <input type="checkbox" id="check21" />
+              <label for="check21">Checkbox size 24x24px (rõ ràng)</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check22" />
+              <label for="check22">Click anywhere trong box để toggle</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check23" />
+              <label for="check23">Hover effect rõ ràng</label>
+            </li>
+            <li>
+              <input type="checkbox" id="check24" />
+              <label for="check24">Links vẫn clickable bình thường</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Live Preview -->
+      <div class="test-section">
+        <h2><i class="fas fa-eye"></i> Live Preview</h2>
+        <p>Preview trực tiếp Step1.html trong iframe:</p>
+        <div class="iframe-container">
+          <iframe src="/pages/vi/step1.html"></iframe>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="test-section">
+        <h2><i class="fas fa-rocket"></i> Quick Actions</h2>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap">
+          <button class="test-button" onclick="openStep1()">
+            <i class="fas fa-external-link-alt"></i>
+            Mở Step1 (Tab mới)
+          </button>
+          <button class="test-button secondary" onclick="openStep8()">
+            <i class="fas fa-external-link-alt"></i>
+            Mở Step8 (Tab mới)
+          </button>
+          <button class="test-button" onclick="clearLocalStorage()">
+            <i class="fas fa-trash"></i>
+            Clear localStorage
+          </button>
+          <button class="test-button secondary" onclick="fillTestData()">
+            <i class="fas fa-fill-drip"></i>
+            Fill Test Data
+          </button>
+          <button class="test-button" onclick="showProgress()">
+            <i class="fas fa-chart-bar"></i>
+            Show Progress Summary
+          </button>
+        </div>
+
+        <div id="actionResult" class="test-result"></div>
+      </div>
+
+      <!-- Test Results Summary -->
+      <div class="test-section">
+        <h2><i class="fas fa-clipboard-check"></i> Test Results Summary</h2>
+        <div id="testSummary">
+          <p>Tổng số tests: <strong>24</strong></p>
+          <p>Passed: <strong id="passedCount">0</strong></p>
+          <p>Failed: <strong id="failedCount">24</strong></p>
+          <p>Progress: <strong id="testProgress">0%</strong></p>
+          <div
+            style="
+              background: #e9ecef;
+              height: 20px;
+              border-radius: 10px;
+              overflow: hidden;
+              margin-top: 10px;
+            "
+          >
+            <div
+              id="testProgressBar"
+              style="
+                background: #28a745;
+                height: 100%;
+                width: 0%;
+                transition: width 0.3s ease;
+              "
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Update test summary
+      function updateTestSummary() {
+        const checkboxes = document.querySelectorAll(
+          '.checklist input[type="checkbox"]'
+        );
+        const total = checkboxes.length;
+        let passed = 0;
+
+        checkboxes.forEach((cb) => {
+          if (cb.checked) passed++;
+        });
+
+        const failed = total - passed;
+        const progress = Math.round((passed / total) * 100);
+
+        document.getElementById("passedCount").textContent = passed;
+        document.getElementById("failedCount").textContent = failed;
+        document.getElementById("testProgress").textContent = progress + "%";
+        document.getElementById("testProgressBar").style.width = progress + "%";
+      }
+
+      // Add event listeners to all checkboxes
+      document
+        .querySelectorAll('.checklist input[type="checkbox"]')
+        .forEach((cb) => {
+          cb.addEventListener("change", updateTestSummary);
+        });
+
+      // Quick actions
+      function openStep1() {
+        window.open("/pages/vi/step1.html", "_blank");
+        showActionResult("Đã mở Step1 trong tab mới", "success");
+      }
+
+      function openStep8() {
+        window.open("/pages/vi/step8.html", "_blank");
+        showActionResult("Đã mở Step8 trong tab mới", "success");
+      }
+
+      function testMobileView() {
+        window.open("/pages/vi/step1.html", "_blank", "width=375,height=667");
+        showActionResult("Đã mở Step1 trong mobile view (375x667)", "success");
+      }
+
+      function clearLocalStorage() {
+        if (confirm("Bạn có chắc muốn xóa tất cả localStorage?")) {
+          localStorage.clear();
+          showActionResult("Đã xóa tất cả localStorage", "success");
+        }
+      }
+
+      function fillTestData() {
+        showActionResult(
+          "Mở Step1 và nhấn F12 → Console → gõ: fillTestData()",
+          "success"
+        );
+      }
+
+      function showProgress() {
+        updateTestSummary();
+        showActionResult("Test progress đã được cập nhật!", "success");
+      }
+
+      function showActionResult(message, type = "success") {
+        const result = document.getElementById("actionResult");
+        result.className = "test-result show " + type;
+        result.innerHTML = `<i class="fas fa-${
+          type === "success" ? "check-circle" : "exclamation-circle"
+        }"></i> ${message}`;
+
+        setTimeout(() => {
+          result.classList.remove("show");
+        }, 3000);
+      }
+
+      // Initialize
+      updateTestSummary();
+    </script>
+  </body>
+</html>
